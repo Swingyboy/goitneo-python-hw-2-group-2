@@ -5,7 +5,7 @@ import sys
 CONTACTS = {}
 
 
-def input_error(func):
+def input_error_handler(func):
     def inner(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -20,7 +20,7 @@ def input_error(func):
     return inner
 
 
-def event_loop_error(func):
+def event_loop_error_handler(func):
     def inner(*args, **kwargs):
         while True:
             try:
@@ -42,7 +42,7 @@ def _parse_input(user_input: str) -> Tuple[str, ...]:
     return cmd, *args
 
 
-@input_error
+@input_error_handler
 def _add_contact(*args) -> str:
     name, phone = args
     if name in CONTACTS:
@@ -56,7 +56,7 @@ def _add_contact(*args) -> str:
         return f"Contact {name.capitalize()} has been added."
 
 
-@input_error
+@input_error_handler
 def _change_contact(*args) -> str:
     name, phone = args
     if name not in CONTACTS:
@@ -97,7 +97,7 @@ SUPPORTED_COMMANDS = {"exit": _exit_bot,
                       }
 
 
-@event_loop_error
+@event_loop_error_handler
 def bot_event_loop():
     while True:
         user_input = input("Enter a command: ").strip().lower()
